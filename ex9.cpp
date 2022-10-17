@@ -1,47 +1,56 @@
 #include <iostream>
 
-const int len = 8;
-
-bool TestMotDePasse(std::string monmotdepasse)
+std::string Cesarify(std::string input, int cesar_coef)
 {
-    return monmotdepasse == "aaaaboba";
-}
+    std::string output;
+    char temp;
 
-/// @return false if reached max depth.
-bool addCharRecursively(std::string* testing, int pos = -2)
-{
-    if (pos == -2)
-        pos = len - 1;
-    else if (pos == -1)
-        return false;
-    
-    if (testing->at(pos) == 'z')
+    for (size_t i = 0; i < input.size(); i++)
     {
-        testing->at(pos) = 'a';
-        return addCharRecursively(testing, pos - 1);
+        if (input[i] >= 'a' && input[i] <= 'z')
+        {
+            temp = input[i] + cesar_coef;
+            while (temp > 'z')
+            {
+                temp -= 'z' - 'a' + 1;
+            }
+            while (temp < 'a')
+            {
+                temp += 'z' - 'a' + 1;
+            }
+            output.push_back(temp);
+        }
+        else if (input[i] >= 'A' && input[i] <= 'Z')
+        {
+            temp = input[i] + cesar_coef;
+            while (temp > 'Z')
+            {
+                temp -= 'Z' - 'A' + 1;
+            }
+            while (temp < 'A')
+            {
+                temp += 'Z' - 'A' + 1;
+            }
+            output.push_back(temp);
+        }
+        else
+            output.push_back(input[i]);
     }
-    else
-    {
-        testing->at(pos)++;
-        return true;
-    }    
+    
+    return output;
 }
 
 int main()
 {
-    std::string testing = "aaaaaaaa";
+    std::string input;
+    std::cout << "String to 'cesarify': ";
+    std::getline(std::cin, input);
 
-    do
-    {
-        std::cout << testing << std::endl;
-        if (TestMotDePasse(testing))
-        {
-            std::cout << "Password found! It's = " << testing << std::endl;
-            return 0;
-        }
-        
-    } while (addCharRecursively(&testing));
-    
-    std::cout << "Password cannot be retrouved :(" << std::endl;
+    int cesar_coef;
+    std::cout << "Coefficient of cesarifying (can be negative): ";
+    std::cin >> cesar_coef;
+
+    std::cout << Cesarify(input, cesar_coef) << std::endl;
+
     return 0;
 }
